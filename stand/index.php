@@ -1,25 +1,45 @@
 <?php
-// stand/index.php
-session_start();
-include("includes/db_conn.php");
+include("includes/db_conn.php"); // Inclui o ficheiro de ligação à base de dados
 
+// Função segura para puxar dados da base
+function get_data($conn, $table, $column = null) {
+    // Tabelas permitidas
+    $allowed_tables = ['automoveis'];
+    // Colunas permitidas
+    $allowed_columns = ['marca', 'caixa', 'modelo', 'ano_lancamento', 'condicao', 'tipo_combustivel', 'preco'];
 
-$sql = "SELECT * FROM automoveis";
-$query = $conn->prepare($sql);
-$query->execute();
-$result= $query->get_result();
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+    // Verifica se a tabela é válida
+    if (!in_array($table, $allowed_tables)) {
+        die("Tabela inválida!");
     }
-} else {
-    echo "Nenhum automóvel encontrado.";
+
+    // Se foi passada uma coluna específica
+    if ($column !== null) {
+        // Verifica se a coluna é válida
+        if (!in_array($column, $allowed_columns)) {
+            die("Coluna inválida!");
+        }
+        // Seleciona valores distintos dessa coluna e ordena
+        $sql = "SELECT DISTINCT $column FROM $table ORDER BY $column ASC";
+    } else {
+        // Se não for coluna específica, seleciona todos os dados
+        $sql = "SELECT * FROM $table";
+    }
+
+    $query = $conn->prepare($sql); // Prepara a query
+    $query->execute(); // Executa a query
+    return $query->get_result(); // Retorna os resultados
 }
-var_dump($row);
 
+// Puxar dados distintos para preencher os selects do filtro
+$marcas = get_data($conn, 'automoveis', 'marca');
+$caixas = get_data($conn, 'automoveis', 'caixa');
+$combustiveis = get_data($conn, 'automoveis', 'tipo_combustivel');
+$modelos = get_data($conn, 'automoveis', 'modelo');
+
+// Puxar todos os carros para mostrar na listagem
+$carros = get_data($conn, 'automoveis');
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -27,64 +47,105 @@ var_dump($row);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stand de Automóveis</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css"> <!-- Ligação ao CSS -->
 </head>
 <body>
-  <!-- Topo -->
+  <!-- Cabeçalho do site -->
   <header>
     <div class="logo">STAND AUTO</div>
   </header>
 
-  <!-- Estrutura principal -->
   <div class="container">
-    <!-- Menu lateral -->
+    <!-- Menu lateral com filtros -->
     <aside class="filtros">
       <h2>Filtros</h2>
 
+      <!-- Select Marca -->
       <label for="marca">Marca</label>
-      <select id="marca">
-        <option>Escolha uma marca</option>
-        <option value=""></option>
+      <select id="marca" name="marca">
+        <option value="">Escolha uma marca</option>
+        <?php while($row = $marcas->fetch_assoc()): ?>
+          <option value="<?= htmlspecialchars($row['marca']) ?>"><?= htmlspecialchars($row['marca']) ?></option>
+        <?php endwhile; ?>
       </select>
 
+      <!-- Select Caixa -->
+      <label for="caixa">Caixa</label>
+      <select id="caixa" name="caixa">
+        <option value="">Escolha a caixa</option>
+        <?php while($row = $caixas->fetch_assoc()): ?>
+          <option value="<?= htmlspecialchars($row['caixa']) ?>"><?= htmlspecialchars($row['caixa']) ?></option>
+        <?php endwhile; ?>
+      </select>
+
+      <!-- Select Combustível -->
       <label for="combustivel">Combustível</label>
-      <select id="combustivel">
-        <option>Escolha um combustível</option>
+      <select id="combustivel" name="combustivel">
+        <option value="">Escolha um combustível</option>
+        <?php while($row = $combustiveis->fetch_assoc()): ?>
+          <option value="<?= htmlspecialchars($row['tipo_combustivel']) ?>"><?= htmlspecialchars($row['tipo_combustivel']) ?></option>
+        <?php endwhile; ?>
       </select>
 
+      <!-- Select Modelo -->
+      <label for="modelo">Modelo</label>
+      <select id="modelo" name="modelo">
+        <option value="">Escolha o modelo</option>
+        <?php while($row = $modelos->fetch_assoc()): ?>
+          <option value="<?= htmlspecialchars($row['modelo']) ?>"><?= htmlspecialchars($row['modelo']) ?></option>
+        <?php endwhile; ?>
+      </select>
+
+      <!-- Inputs de preço -->
       <label for="preco">Preço</label>
       <div class="range">
         <input type="number" placeholder="Desde">
         <input type="number" placeholder="Até">
       </div>
 
+      <!-- Inputs de ano -->
       <label for="ano">Ano</label>
       <div class="range">
         <input type="number" placeholder="Desde">
         <input type="number" placeholder="Até">
       </div>
 
+      <!-- Inputs de quilómetros -->
       <label for="km">Quilómetros</label>
       <div class="range">
         <input type="number" placeholder="Desde">
         <input type="number" placeholder="Até">
       </div>
 
-      <label for="estado">Estado</label>
-      <select id="estado">
-        <option>Usado</option>
-        <option>Novo</option>
+      <!-- Select Condição -->
+      <label for="condicao">Condição</label>
+      <select id="condicao" name="condicao">
+        <option value="Usado">Usado</option>
+        <option value="Novo">Novo</option>
       </select>
+
+      <!-- Botão para aplicar filtros -->
+      <button type="button">Aplicar Filtros</button>
     </aside>
 
-    <!-- Área principal -->
+    <!-- Área principal para mostrar os carros -->
     <main class="listagem">
       <h2>Carros disponíveis</h2>
 
-      <div class="carro-box">
-        <!-- Todos os carros -->
-        <p>CARRO</p>
-      </div>
+      <?php if($carros->num_rows > 0): ?>
+        <?php while($row = $carros->fetch_assoc()): ?>
+          <div class="carro-box">
+            <p><strong>Marca:</strong> <?= htmlspecialchars($row['marca']) ?></p>
+            <p><strong>Modelo:</strong> <?= htmlspecialchars($row['modelo']) ?></p>
+            <p><strong>Caixa:</strong> <?= htmlspecialchars($row['caixa']) ?></p>
+            <p><strong>Combustível:</strong> <?= htmlspecialchars($row['tipo_combustivel']) ?></p>
+            <p><strong>Ano:</strong> <?= htmlspecialchars($row['ano_lancamento']) ?></p>
+            <p><strong>Preço:</strong> €<?= htmlspecialchars($row['preco']) ?></p>
+          </div>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <p>Nenhum automóvel encontrado.</p>
+      <?php endif; ?>
     </main>
   </div>
 </body>
