@@ -1,4 +1,4 @@
--- --------------------------------------------------------
+test-- --------------------------------------------------------
 -- Anfitrião:                    127.0.0.1
 -- Versão do servidor:           10.4.32-MariaDB - mariadb.org binary distribution
 -- SO do servidor:               Win64
@@ -16,8 +16,8 @@
 
 
 -- A despejar estrutura da base de dados para test
-CREATE DATABASE IF NOT EXISTS `test` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
-USE `test`;
+CREATE DATABASE IF NOT EXISTS `stand` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
+USE `stand`;
 
 -- A despejar estrutura para tabela test.automoveis
 CREATE TABLE IF NOT EXISTS `automoveis` (
@@ -34,10 +34,8 @@ CREATE TABLE IF NOT EXISTS `automoveis` (
   UNIQUE KEY `id_carros` (`id_carros`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- A despejar dados para tabela test.automoveis: ~1 rows (aproximadamente)
-DELETE FROM `automoveis`;
 INSERT INTO `automoveis` (`id_carros`, `marca`, `caixa`, `modelo`, `ano_lancamento`, `tipo_compbustivel`, `condicao`, `preco`, `id_fornecedor`) VALUES
-	(1, 'AUDI', 'MANUAL', 'R8', '2021-01-01', 'GASOLINA', 'USADO', 180000.000000, 1);
+	(1, 'AUDI', 'MANUAL', 'R8', '2021-01-01', 'GASOLINA', 'USADO', 1800, 1);
 
 -- A despejar estrutura para tabela test.cliente
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -50,8 +48,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   UNIQUE KEY `id_cliente` (`id_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- A despejar dados para tabela test.cliente: ~0 rows (aproximadamente)
-DELETE FROM `cliente`;
+
 
 -- A despejar estrutura para tabela test.colaboradores
 CREATE TABLE IF NOT EXISTS `colaboradores` (
@@ -67,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `colaboradores` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- A despejar dados para tabela test.colaboradores: ~1 rows (aproximadamente)
-DELETE FROM `colaboradores`;
 INSERT INTO `colaboradores` (`id_col`, `nome`, `email`, `password`, `salario`, `morada`, `telefone`) VALUES
 	(1, 'cliente_1', 'adm@gmail.com', 'teste123', 0.000000, '', 915547895);
 
@@ -82,7 +78,6 @@ CREATE TABLE IF NOT EXISTS `fornecedor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- A despejar dados para tabela test.fornecedor: ~1 rows (aproximadamente)
-DELETE FROM `fornecedor`;
 INSERT INTO `fornecedor` (`id_fornecedor`, `nome`, `contacto`, `preco_compra`) VALUES
 	(1, 'Ricardo', '9122547956', 0.000000);
 
@@ -103,8 +98,7 @@ CREATE TABLE IF NOT EXISTS `venda_automoveis` (
   CONSTRAINT `id_col` FOREIGN KEY (`id_col`) REFERENCES `colaboradores` (`id_col`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- A despejar dados para tabela test.venda_automoveis: ~0 rows (aproximadamente)
-DELETE FROM `venda_automoveis`;
+
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
