@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `automoveis` (
   `ano_lancamento` date NOT NULL,
   `tipo_compbustivel` varchar(50) NOT NULL,
   `condicao` varchar(50) NOT NULL,
-  `preco` decimal(20,6) NOT NULL DEFAULT 0.000000,
+  `preco` decimal(20,6) NOT NULL DEFAULT 0.00,
   `id_fornecedor` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id_carros`),
   UNIQUE KEY `id_carros` (`id_carros`)

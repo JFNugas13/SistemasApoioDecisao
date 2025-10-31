@@ -1,6 +1,7 @@
 <?php
 include("includes/db_conn.php"); // Inclui o ficheiro de ligação à base de dados
 
+
 // Função segura para puxar dados da base
 function get_data($conn, $table, $column = null) {
     // Tabelas permitidas
@@ -32,7 +33,7 @@ function get_data($conn, $table, $column = null) {
 }
 
 // Puxar dados distintos para preencher os selects do filtro
-$marcas = get_data($conn, 'automoveis', 'marca');
+$marcas = get_data($conn, 'automoveis');
 $caixas = get_data($conn, 'automoveis', 'caixa');
 $combustiveis = get_data($conn, 'automoveis', 'tipo_combustivel');
 $modelos = get_data($conn, 'automoveis', 'modelo');
@@ -140,7 +141,7 @@ $carros = get_data($conn, 'automoveis');
             <p><strong>Caixa:</strong> <?= htmlspecialchars($row['caixa']) ?></p>
             <p><strong>Combustível:</strong> <?= htmlspecialchars($row['tipo_combustivel']) ?></p>
             <p><strong>Ano:</strong> <?= htmlspecialchars($row['ano_lancamento']) ?></p>
-            <p><strong>Preço:</strong> €<?= htmlspecialchars($row['preco']) ?></p>
+            <p><strong>Preço:</strong> €<?= htmlspecialchars($round = round($row['preco']),2) ?></p>
           </div>
         <?php endwhile; ?>
       <?php else: ?>
