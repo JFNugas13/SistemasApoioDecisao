@@ -1,7 +1,6 @@
 <?php
 include("includes/db_conn.php"); // Inclui o ficheiro de ligação à base de dados
 
-
 // Função segura para puxar dados da base
 function get_data($conn, $table, $column = null) {
     // Tabelas permitidas
@@ -33,7 +32,7 @@ function get_data($conn, $table, $column = null) {
 }
 
 // Puxar dados distintos para preencher os selects do filtro
-$marcas = get_data($conn, 'automoveis');
+$marcas = get_data($conn, 'automoveis', 'marca');
 $caixas = get_data($conn, 'automoveis', 'caixa');
 $combustiveis = get_data($conn, 'automoveis', 'tipo_combustivel');
 $modelos = get_data($conn, 'automoveis', 'modelo');
@@ -49,6 +48,7 @@ $carros = get_data($conn, 'automoveis');
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stand de Automóveis</title>
   <link rel="stylesheet" href="assets/css/style.css"> <!-- Ligação ao CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <!-- Cabeçalho do site -->
@@ -135,14 +135,40 @@ $carros = get_data($conn, 'automoveis');
 
       <?php if($carros->num_rows > 0): ?>
         <?php while($row = $carros->fetch_assoc()): ?>
-          <div class="carro-box">
-            <p><strong>Marca:</strong> <?= htmlspecialchars($row['marca']) ?></p>
-            <p><strong>Modelo:</strong> <?= htmlspecialchars($row['modelo']) ?></p>
-            <p><strong>Caixa:</strong> <?= htmlspecialchars($row['caixa']) ?></p>
-            <p><strong>Combustível:</strong> <?= htmlspecialchars($row['tipo_combustivel']) ?></p>
-            <p><strong>Ano:</strong> <?= htmlspecialchars($row['ano_lancamento']) ?></p>
-            <p><strong>Preço:</strong> €<?= htmlspecialchars($round = round($row['preco']),2) ?></p>
+
+              <div class="carro-box">
+            <div class="carro-img">
+              <img src="assets/carros/<?= htmlspecialchars($row['img']) ?>" alt="<?= htmlspecialchars($row['modelo']) ?>">
+            </div>
+
+            <div class="carro-info">
+              <div class="carro-topo">
+                <div class="carro-titulos">
+                  <h3><?= htmlspecialchars($row['marca']) ?> <?= htmlspecialchars($row['modelo']) ?></h3>
+                  <p class="versao"><?= htmlspecialchars($row['caixa']) ?> 
+                </div>
+                <div class="carro-preco">
+                  €<?= number_format($row['preco'], 0, ',', '.') ?>
+                </div>
+              </div>
+
+              <div class="carro-detalhes">
+                <div class="item">
+                  <i class="fa-solid fa-gas-pump"></i>
+                  <span><?= htmlspecialchars($row['tipo_combustivel']) ?></span>
+                </div>
+                <div class="item">
+                  <i class="fa-solid fa-calendar"></i>
+                  <span><?= htmlspecialchars($row['ano_lancamento']) ?></span>
+                </div>
+                <div class="item">
+                  <i class="fa-solid fa-road"></i>
+                  <span><?= number_format($row['quilometros'], 0, ',', '.') ?> km</span>
+                </div>
+              </div>
+            </div>
           </div>
+
         <?php endwhile; ?>
       <?php else: ?>
         <p>Nenhum automóvel encontrado.</p>
@@ -150,4 +176,5 @@ $carros = get_data($conn, 'automoveis');
     </main>
   </div>
 </body>
+<script src="assets/js/scripts.js"></script>
 </html>

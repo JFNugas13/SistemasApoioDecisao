@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -26,19 +27,24 @@ header {
 .container {
   display: flex;
   min-height: calc(100vh - 70px);
+  gap: 20px;
+  padding: 20px;
 }
 
-/* Barra lateral */
+/* Barra lateral (filtros) */
 .filtros {
-  width: 260px;
+  width: 300px;
   background: white;
-  padding: 20px;
+  padding: 25px;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  height: fit-content;
 }
 
 .filtros h2 {
   color: #e50914;
   margin-bottom: 20px;
+  font-size: 1.3rem;
 }
 
 .filtros label {
@@ -58,6 +64,10 @@ header {
   outline: none;
 }
 
+select {
+  cursor: pointer;
+}
+
 .range {
   display: flex;
   gap: 8px;
@@ -67,23 +77,158 @@ header {
   width: 50%;
 }
 
+.filtros button {
+  width: 100%;
+  margin-top: 25px;
+  background-color: #e50914;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filtros button:hover {
+  background-color: #c40811;
+}
+
 /* Área principal */
 .listagem {
   flex: 1;
-  padding: 30px;
+  padding: 10px;
 }
 
 .listagem h2 {
   margin-bottom: 20px;
   color: #333;
+  font-size: 1.4rem;
 }
 
+/* Cada carro */
 .carro-box {
+  display: flex;
   background: white;
-  border-radius: 10px;
-  padding: 40px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  color: #777;
-  font-size: 1.1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carro-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* Imagem do carro */
+.carro-img {
+  flex: 0 0 250px;
+  height: 170px;
+  overflow: hidden;
+}
+
+.carro-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Parte da informação */
+.carro-info {
+  flex: 1;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Título e preço */
+.carro-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.carro-titulos h3 {
+  font-size: 1.3rem;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.carro-titulos .versao {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Preço destacado */
+.carro-preco {
+  background-color: #e50914;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Detalhes inferiores (ícones) */
+.carro-detalhes {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  border-top: 1px solid #eee;
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+.carro-detalhes .item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.carro-detalhes i {
+  color: #888;
+  font-size: 1rem;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .filtros {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .listagem {
+    padding: 0;
+  }
+
+  .carro-box {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .carro-img {
+    width: 100%;
+    height: 200px;
+  }
+
+  .carro-info {
+    width: 100%;
+  }
+
+  .carro-preco {
+    font-size: 1.1rem;
+  }
 }
