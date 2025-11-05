@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The 7Tech</title>
+   <link rel="icon" type="icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="Logótipo The 7Tech" class="logo">
+    </div>
+  </header>
+
+  <section class="hero">
+    <h2>Transformamos Ideias em Soluções Digitais</h2>
+    <p>Desenvolvemos websites e soluções tecnológicas personalizadas para empresas em todo o país.</p>
+    <a href="#servicos" class="btn">Conheça os nossos serviços</a>
+  </section>
+
+  <main>
+    <section id="servicos" class="servicos">
+
+      <h2>Os Nossos Serviços</h2>
+      <div class="cards">
+        <div class="card" onclick="showTeam('web')">
+          <h3>Criação de Websites</h3>
+          <p>Sites modernos, responsivos e adaptados às necessidades da sua empresa.</p>
+        </div>
+        <div class="card" onclick="showTeam('redes')">
+          <h3>Gestão de Redes & Suporte</h3>
+          <p>Instalação, manutenção e suporte técnico especializado.</p>
+        </div>
+        <div class="card" onclick="showTeam('consultoria')">
+          <h3>Consultoria Tecnológica</h3>
+          <p>Soluções inovadoras em informática e comunicações para o seu negócio.</p>
+        </div>
+      </div>
+
+      <div id="team-slideshow" class="slideshow hidden">
+        <button class="close-btn" onclick="closeSlideshow()">✖</button>
+        <h3 id="team-title"></h3>
+        <div class="slides-container" id="slides-container"></div>
+        <div class="slide-controls">
+          <button onclick="prevSlide()">&#10094;</button>
+          <button onclick="nextSlide()">&#10095;</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="contato">
+      <h2>Fale Conosco</h2>
+      <form>
+        <input type="text" placeholder="O seu nome" required>
+        <input type="email" placeholder="O seu e-mail" required>
+        <textarea placeholder="A sua mensagem" required></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="sobre">
+        <h3>Sobre a The 7Tech</h3>
+        <p>Empresa portuguesa especializada em intercomunicações e informática.  
+        Ajudamos empresas a modernizar os seus negócios através da tecnologia.</p>
+      </div>
+
+      <div class="info-contato">
+        <h3>Contacto</h3>
+        <p><strong>Email:</strong> <a href="mailto:the7tech@gmail.com">the7tech@gmail.com</a></p>
+        <p><strong>Telefone:</strong> <a href="tel:+351912345678">+351 912 345 678</a></p>
+      </div>
+    </div>
+
+    <p class="direitos">&copy; 2025 The 7Tech - Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const teams = {
+      web: [
+        { nome: "Duarte Gonçalves", papelP: "Programador", papelS: "Analista" },
+        { nome: "Diogo Vieira", papelP: "Programador", papelS: "Analista" },
+        { nome: "Yannick Carvalho", papelP: "Gestão e Coordenação", papelS: "Suporte e Comunicação" }
+      ],
+      redes: [
+        { nome: "João Nogueira", papelP: "Analista", papelS: "Secretário" },
+        { nome: "José Pereira", papelP: "Analista", papelS: "Secretário" },
+        { nome: "Yannick Carvalho", papelP: "Gestão e Coordenação", papelS: "Suporte e Comunicação" }
+      ],
+      consultoria: [
+        { nome: "Jesus Barrera", papelP: "Secretário", papelS: "Programador" },
+        { nome: "Diogo Maia", papelP: "Secretário", papelS: "Programador" },
+        { nome: "Yannick Carvalho", papelP: "Gestão e Coordenação", papelS: "Suporte e Comunicação" }
+      ]
+    };
+
+    let currentSlides = [];
+    let currentIndex = 0;
+
+    function showTeam(service) {
+      const slideshow = document.getElementById('team-slideshow');
+      const container = document.getElementById('slides-container');
+      const title = document.getElementById('team-title');
+      
+      container.innerHTML = '';
+      currentSlides = teams[service];
+      currentIndex = 0;
+
+      switch (service) {
+        case 'web': title.textContent = "Equipa responsável pela Criação de Websites"; break;
+        case 'redes': title.textContent = "Equipa responsável pela Gestão de Redes & Suporte"; break;
+        case 'consultoria': title.textContent = "Equipa responsável pela Consultoria Tecnológica"; break;
+      }
+
+      currentSlides.forEach(member => {
+        const slide = document.createElement('div');
+        slide.classList.add('slide');
+        slide.innerHTML = `
+          <h4>${member.nome}</h4>
+          <p><strong>Profissão Principal:</strong> ${member.papelP}</p>
+          <p><strong>Profissão Secundária:</strong> ${member.papelS}</p>
+        `;
+        container.appendChild(slide);
+      });
+
+      updateSlide();
+      slideshow.classList.remove('hidden');
+    }
+
+    function updateSlide() {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach((slide, index) => {
+        slide.style.display = index === currentIndex ? 'block' : 'none';
+      });
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % currentSlides.length;
+      updateSlide();
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + currentSlides.length) % currentSlides.length;
+      updateSlide();
+    }
+
+    function closeSlideshow() {
+      document.getElementById('team-slideshow').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
